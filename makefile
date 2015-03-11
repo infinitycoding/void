@@ -1,16 +1,9 @@
-SRCS = $(shell find -name '*.cpp')
-OBJS = $(addsuffix .o,$(basename $(SRCS)))
 
-CC = g++
-BIN = void
-
-$(BIN): $(OBJS)
-	$(CC) -o $@ $^
-
-%.o : %.cpp
-	$(CC) -c -o $@ $<
+all:
+	$(MAKE) -C src
+	$(MAKE) -C test
 
 clean:
-	rm $(OBJS)
-	rm $(BIN)
+	$(MAKE) -C src clean
+	$(MAKE) -C test clean
 
