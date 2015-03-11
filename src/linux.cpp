@@ -1,3 +1,5 @@
+#ifdef __linux__
+
 #include <void.h>
 
 #include <stdio.h>
@@ -11,7 +13,7 @@
 #define SIGNAL_REGISTER	SIGUSR1
 #define SIGNAL_COMMAND	SIGUSR2
 
-void signal_handler(int sig, siginfo_t *siginfo, void *addr)
+void linux_signal_handler(int sig, siginfo_t *siginfo, void *addr)
 {
 	pid_t pid = siginfo->si_pid;
 
@@ -35,7 +37,7 @@ int init_linux(void)
 
 	// register signals
 	struct sigaction act;
-	act.sa_sigaction = signal_handler;
+	act.sa_sigaction = linux_signal_handler;
 	act.sa_flags = SA_SIGINFO;
 
 	int r1 = sigaction(SIGNAL_REGISTER, &act, NULL);
@@ -64,4 +66,6 @@ int init_linux(void)
 
 	return 0;
 }
+
+#endif
 

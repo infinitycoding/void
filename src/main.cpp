@@ -1,24 +1,25 @@
-#include <void.h>
+#include "void.h"
+#include "client.h"
 
 #include <stdio.h>
 #include <stdlib.h>
 
-void sig_register(pid_t pid)
+void sig_register(int id)
 {
-	printf("[VOID] got request from pid %d\n", pid);
-
-	printf("[VOID] terminating..\n");
-	exit(0);
+	printf("[VOID] register client with id %d\n", id);
+	Client *client = new Client(id);
 }
 
-void sig_command(pid_t pid)
+void sig_command(int id)
 {
-	
+	printf("[VOID] have to execute command for %d\n", id);
 }
 
 int main(int argc, char **argv)
 {
+	#ifdef __linux__
 	init_linux();
+	#endif
 
 	return 0;
 }

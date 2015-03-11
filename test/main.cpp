@@ -17,14 +17,13 @@ int main(int argc, char **argv)
 	{
 		sleep(1);
 
-		printf("[TEST] testpid: %d, voidpid: %d\n", getpid(), pid);
-		printf("[TEST] send signal SIGUSR1 (%d)\n", SIGUSR1);
 		kill(pid, SIGUSR1);
+		sleep(1);
 
-		int status;
-		waitpid(pid, &status, 0);
+		kill(pid, SIGUSR2);
+		sleep(1);
 
-		printf("void terminated with %d\n", status);
+		kill(pid, SIGKILL);
 	}
 
 	return 0;
