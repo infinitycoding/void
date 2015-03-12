@@ -84,11 +84,15 @@ int Client::read(int fd, void *buffer, size_t length)
 {
     FileDescriptor *desc = this->getDesc(fd);
     printf("[VOID] read %d bytes from %d\n", length, fd);
+
+    return length;
 }
 
 int Client::write(int fd, const void *buffer, size_t length)
 {
     FileDescriptor *desc = this->getDesc(fd);
     printf("[VOID] write %d bytes to %d\n", length, fd);
+
+    return length;
 }
 
