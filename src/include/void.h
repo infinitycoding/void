@@ -11,6 +11,38 @@ enum command
 	WRITE
 };
 
+struct arg_open
+{
+	int modus;
+};
+
+struct arg_close
+{
+	int fd;
+};
+
+struct arg_read
+{
+	int fd;
+};
+
+struct arg_write
+{
+	int fd;
+};
+
+struct command_data
+{
+	enum command cmd;
+	union
+	{
+		struct arg_open arg_open;
+		struct arg_close arg_close;
+		struct arg_read arg_read;
+		struct arg_write arg_write;
+	};
+};
+
 void sig_register(int id);
 void sig_command(int id);
 
@@ -21,6 +53,9 @@ int init_linux(void);
 #ifdef __universe__ // ??
 int init_universe(void);
 #endif
+
+
+void *create_shm(int *shm_id);
 
 #endif
 

@@ -4,15 +4,17 @@
 #include <stdio.h>
 #include <stdlib.h>
 
+Client *client;
+
 void sig_register(int id)
 {
 	printf("[VOID] register client with id %d\n", id);
-	Client *client = new Client(id);
+	client = new Client(id);
 }
 
 void sig_command(int id)
 {
-	printf("[VOID] have to execute command for %d\n", id);
+	client->command();
 }
 
 int main(int argc, char **argv)
