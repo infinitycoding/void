@@ -3,7 +3,7 @@ OBJS = $(addsuffix .o,$(basename $(SRCS)))
 
 C_SRCS = $(shell find `pwd` -name '*.cpp')
 C_HDRS = $(shell find `pwd` -name '*.h')
-STYLEFLAGS = --style=allman --indent-switches
+STYLEFLAGS = --style=allman --indent-switches --indent-classes
 
 CC = g++
 CFLAGS = -Iinclude

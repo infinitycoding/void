@@ -24,11 +24,13 @@ struct arg_close
 struct arg_read
 {
     int fd;
+    size_t length;
 };
 
 struct arg_write
 {
     int fd;
+    size_t length;
 };
 
 struct command_data

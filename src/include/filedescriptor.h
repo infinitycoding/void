@@ -3,11 +3,11 @@
 
 class FileDescriptor
 {
-public:
-    FileDescriptor();
-    ~FileDescriptor();
+    public:
+        FileDescriptor();
+        ~FileDescriptor();
 
-    int id;
+        int id;
 };
 
 #endif

@@ -1,27 +1,32 @@
 #ifndef _process_h_
 #define _process_h_
 
-#include <void.h>
-
+#include "void.h"
+#include "list.h"
+#include "filedescriptor.h"
 
 class Client
 {
-public:
-    Client(int id);
-    ~Client();
+    public:
+        Client(int id);
+        ~Client();
 
-    int id;
+        int id;
 
-    void command(void);
+        void command(void);
 
-    int open(const char *path);
-    int close(int fd);
-    int read(void);
-    int write(void);
+        FileDescriptor *getDesc(int fd);
 
-private:
-    int shm_id;
-    struct command_data *data;
+        int open(const char *path);
+        int close(int fd);
+        int read(int fd, void *buffer, size_t length);
+        int write(int fd, const void *buffer, size_t length);
+
+    private:
+        int shm_id;
+        struct command_data *data;
+
+        List<FileDescriptor*> *files;
 };
 
 #endif
