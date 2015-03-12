@@ -5,42 +5,43 @@
 
 enum command
 {
-	OPEN,
-	CLOSE,
-	READ,
-	WRITE
+    OPEN,
+    CLOSE,
+    READ,
+    WRITE
 };
 
 struct arg_open
 {
-	int modus;
+    int modus;
 };
 
 struct arg_close
 {
-	int fd;
+    int fd;
 };
 
 struct arg_read
 {
-	int fd;
+    int fd;
 };
 
 struct arg_write
 {
-	int fd;
+    int fd;
 };
 
 struct command_data
 {
-	enum command cmd;
-	union
-	{
-		struct arg_open arg_open;
-		struct arg_close arg_close;
-		struct arg_read arg_read;
-		struct arg_write arg_write;
-	};
+    enum command cmd;
+    int ret;
+    union
+    {
+        struct arg_open arg_open;
+        struct arg_close arg_close;
+        struct arg_read arg_read;
+        struct arg_write arg_write;
+    };
 };
 
 void sig_register(int id);

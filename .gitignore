@@ -4,6 +4,7 @@ void
 *.cpp~
 *.c~
 
+*.orig
 
 .gitignore~
 makefile~

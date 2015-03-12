@@ -6,22 +6,22 @@
 
 class Client
 {
-	public:
-		Client(int id);
-		~Client();
+public:
+    Client(int id);
+    ~Client();
 
-		int id;
+    int id;
 
-		void command(void);
+    void command(void);
 
-		void open(void *ret, const char *path);
-		void close(void *ret, int fd);
-		void read(void);
-		void write(void);
+    int open(const char *path);
+    int close(int fd);
+    int read(void);
+    int write(void);
 
-	private:
-		int shm_id;
-		struct command_data *data;
+private:
+    int shm_id;
+    struct command_data *data;
 };
 
 #endif
