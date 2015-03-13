@@ -6,7 +6,7 @@ C_HDRS = $(shell find `pwd` -name '*.h')
 STYLEFLAGS = --style=allman --indent-switches --indent-classes
 
 CC = g++
-CFLAGS = -Iinclude
+CFLAGS = -Iinclude -std=c++11
 BIN = ../void
 
 $(BIN): $(OBJS)
