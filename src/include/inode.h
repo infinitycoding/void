@@ -16,8 +16,8 @@ class Inode
 
         BlockBuffer *buffers[2];
 
-        int read(unsigned int buffer, uintptr_t offset, void *data, size_t length);
-        int write(unsigned int buffer, uintptr_t offset, const void *data, size_t length);
+        size_t read(unsigned int buffer, uintptr_t offset, void *data, size_t length);
+        size_t write(unsigned int buffer, uintptr_t offset, const void *data, size_t length);
 };
 
 #endif

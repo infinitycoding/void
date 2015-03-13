@@ -22,12 +22,13 @@ int main(int argc, char **argv)
 {
     printf("[VOID] create Inode..\n");
     Inode *inode = new Inode();
-    InodeDescriptor *desc = new InodeDescriptor(inode);
+    InodeDescriptor *desc0 = new InodeDescriptor(inode);
+    InodeDescriptor *desc1 = new InodeDescriptor(inode);
 
-    desc->write("Hallo", 6);
+    desc0->write("Hallo", 6);
 
     char buf[16];
-    desc->read(&buf, 6);
+    desc1->read(&buf, 6);
 
     printf("%s\n", buf);
 

@@ -11,7 +11,7 @@ Inode::~Inode()
 {
 }
 
-int Inode::read(unsigned int buffer, uintptr_t offset, void *data, size_t length)
+size_t Inode::read(unsigned int buffer, uintptr_t offset, void *data, size_t length)
 {
     BlockBuffer *b = this->buffers[buffer];
     if(b != NULL)
@@ -21,7 +21,7 @@ int Inode::read(unsigned int buffer, uintptr_t offset, void *data, size_t length
     return 0;
 }
 
-int Inode::write(unsigned int buffer, uintptr_t offset, const void *data, size_t length)
+size_t Inode::write(unsigned int buffer, uintptr_t offset, const void *data, size_t length)
 {
     BlockBuffer *b = this->buffers[buffer];
     if(b != NULL)

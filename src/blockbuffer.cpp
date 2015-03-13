@@ -57,7 +57,7 @@ void BlockBuffer::removeBlock(unsigned int id)
     }
 }
 
-int BlockBuffer::read(uintptr_t offset, uint8_t *data, size_t length)
+size_t BlockBuffer::read(uintptr_t offset, uint8_t *data, size_t length)
 {
     // calculate block indices
     int block_id  = offset / this->block_size;
@@ -87,7 +87,7 @@ int BlockBuffer::read(uintptr_t offset, uint8_t *data, size_t length)
     return i;
 }
 
-int BlockBuffer::write(uintptr_t offset, const uint8_t *data, size_t length)
+size_t BlockBuffer::write(uintptr_t offset, const uint8_t *data, size_t length)
 {
     // calculate block indices
     int block_id  = offset / this->block_size;

@@ -20,8 +20,8 @@ class BlockBuffer
         uint8_t *createBlock(unsigned int id);
         void removeBlock(unsigned int id);
 
-        int read(uintptr_t offset, uint8_t *data, size_t length);
-        int write(uintptr_t offset, const uint8_t *data, size_t length);
+        size_t read(uintptr_t offset, uint8_t *data, size_t length);
+        size_t write(uintptr_t offset, const uint8_t *data, size_t length);
 
     private:
         List<struct buffer_block> *blocks;

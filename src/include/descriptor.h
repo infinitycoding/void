@@ -15,8 +15,8 @@ class InodeDescriptor
         unsigned int read_buffer;
         unsigned int write_buffer;
 
-        int read(void *data, size_t length);
-        int write(const void *data, size_t length);
+        size_t read(void *data, size_t length);
+        size_t write(const void *data, size_t length);
 };
 
 class FileDescriptor
