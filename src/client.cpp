@@ -1,6 +1,6 @@
 
 #include "client.h"
-#include "filedescriptor.h"
+#include "descriptor.h"
 #include "void.h"
 
 #include <stdio.h>
