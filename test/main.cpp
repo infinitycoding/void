@@ -92,6 +92,10 @@ int main(int argc, char **argv)
 
         char buf[16];
         void_read(fd1, &buf, 13);
+        printf("[TEST] read: %s", buf);
+
+        void_read(fd2, &buf, 13);
+        printf("[TEST] read: %s", buf);
 
         void_close(fd1);
         void_close(fd2);

@@ -85,7 +85,11 @@ FileDescriptor *Client::getDesc(int fd)
 int Client::open(const char *path)
 {
     printf("[VOID] open \"%s\"\n", path);
-    FileDescriptor *desc = new FileDescriptor(NULL, NULL);
+    Inode *inode = new Inode();
+    InodeDescriptor *desc0 = new InodeDescriptor(inode);
+    InodeDescriptor *desc1 = new InodeDescriptor(inode);
+    FileDescriptor *desc = new FileDescriptor(desc0, desc1);
+
     desc->id = this->files->numOfElements();
 
     this->files->pushBack(desc);
@@ -105,7 +109,7 @@ int Client::read(int fd, void *buffer, size_t length)
     FileDescriptor *desc = this->getDesc(fd);
     printf("[VOID] read %d bytes from %d\n", length, fd);
 
-    return length;
+    return desc->read(buffer, length);
 }
 
 int Client::write(int fd, const void *buffer, size_t length)
@@ -113,6 +117,6 @@ int Client::write(int fd, const void *buffer, size_t length)
     FileDescriptor *desc = this->getDesc(fd);
     printf("[VOID] write %d bytes to %d\n", length, fd);
 
-    return length;
+    return desc->write(buffer, length);
 }
 
