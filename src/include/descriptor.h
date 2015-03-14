@@ -42,13 +42,16 @@ class InodeDescriptor
 class FileDescriptor
 {
     public:
-        FileDescriptor();
+        FileDescriptor(InodeDescriptor *read_, InodeDescriptor *write_);
         ~FileDescriptor();
 
         int id;
 
         InodeDescriptor *read_descriptor;
         InodeDescriptor *write_descriptor;
+
+        size_t read(void *data, size_t length);
+        size_t write(const void *data, size_t length);
 };
 
 #endif

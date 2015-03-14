@@ -24,11 +24,30 @@
 
 #include <stdio.h>
 
-FileDescriptor::FileDescriptor()
+FileDescriptor::FileDescriptor(InodeDescriptor *read_, InodeDescriptor *write_)
+    : read_descriptor(read_), write_descriptor(write_)
 {
 }
 
 FileDescriptor::~FileDescriptor()
 {
+}
+
+size_t FileDescriptor::read(void *data, size_t length)
+{
+    if(this->read_descriptor != NULL)
+    {
+        return this->read_descriptor->read(data, length);
+    }
+    return 0;
+}
+
+size_t FileDescriptor::write(const void *data, size_t length)
+{
+    if(this->write_descriptor != NULL)
+    {
+        return this->write_descriptor->write(data, length);
+    }
+    return 0;
 }
 

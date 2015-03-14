@@ -45,11 +45,12 @@ int main(int argc, char **argv)
     Inode *inode = new Inode();
     InodeDescriptor *desc0 = new InodeDescriptor(inode);
     InodeDescriptor *desc1 = new InodeDescriptor(inode);
+    FileDescriptor *desc = new FileDescriptor(desc0, desc1);
 
-    desc0->write("Hallo", 6);
+    desc->write("Hallo", 6);
 
     char buf[16];
-    desc1->read(&buf, 6);
+    desc->read(&buf, 6);
 
     printf("%s\n", buf);
 

@@ -85,7 +85,7 @@ FileDescriptor *Client::getDesc(int fd)
 int Client::open(const char *path)
 {
     printf("[VOID] open \"%s\"\n", path);
-    FileDescriptor *desc = new FileDescriptor();
+    FileDescriptor *desc = new FileDescriptor(NULL, NULL);
     desc->id = this->files->numOfElements();
 
     this->files->pushBack(desc);
