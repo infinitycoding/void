@@ -21,15 +21,18 @@
  */
 #ifdef __linux__
 
-#include <void.h>
+#include "void.h"
+#include "client.h"
 
 #include <stdio.h>
-#include <sys/types.h>
+#include <stdlib.h>
+#include <unistd.h>
+#include <signal.h>
+#include <string.h>
+#include <sys/wait.h>
 #include <sys/ipc.h>
 #include <sys/shm.h>
-#include <signal.h>
-#include <unistd.h>
-#include <stdlib.h>
+#include <linux/wait.h>
 
 #define SIGNAL_REGISTER	SIGUSR1
 #define SIGNAL_COMMAND	SIGUSR2
@@ -47,6 +50,8 @@ void linux_signal_handler(int sig, siginfo_t *siginfo, void *addr)
             sig_command(pid);
             break;
     };
+
+    kill(pid, SIGCONT);
 }
 
 int init_linux(void)

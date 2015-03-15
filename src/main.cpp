@@ -41,20 +41,6 @@ void sig_command(int id)
 
 int main(int argc, char **argv)
 {
-    printf("[VOID] create Inode..\n");
-    Inode *inode = new Inode();
-    InodeDescriptor *desc0 = new InodeDescriptor(inode);
-    InodeDescriptor *desc1 = new InodeDescriptor(inode);
-    FileDescriptor *desc = new FileDescriptor(desc0, desc1);
-
-    desc->write("Hallo", 6);
-
-    char buf[16];
-    desc->read(&buf, 6);
-
-    printf("%s\n", buf);
-
-
 #ifdef __linux__
     init_linux();
 #endif
