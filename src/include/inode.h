@@ -27,9 +27,11 @@ class Inode
 {
     public:
         Inode();
+        Inode(const char *name_);
+        Inode(const char *name_, Inode *parent_);
         ~Inode();
 
-        char *name;
+        const char *name;
         size_t length;
         Inode *parent;
 
@@ -37,7 +39,15 @@ class Inode
 
         size_t read(unsigned int buffer, uintptr_t offset, void *data, size_t length);
         size_t write(unsigned int buffer, uintptr_t offset, const void *data, size_t length);
+
+        char *generatePath(void);
+        char *generatePath(char *buffer);
+
+    private:
+        void init_buffers(void);
 };
+
+Inode *lookup_path(const char *path);
 
 #endif
 

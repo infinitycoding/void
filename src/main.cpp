@@ -41,6 +41,12 @@ void sig_command(int id)
 
 int main(int argc, char **argv)
 {
+    Inode *usr = new Inode("usr");
+    Inode *bin = new Inode("bin", usr);
+    Inode *foo = new Inode("foo", bin);
+
+    printf("path: %s\n", foo->generatePath());
+
 #ifdef __linux__
     init_linux();
 #endif

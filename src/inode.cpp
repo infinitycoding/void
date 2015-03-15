@@ -22,14 +22,34 @@
 #include "inode.h"
 #include "blockbuffer.h"
 
+#include <stdlib.h>
+#include <string.h>
+
 Inode::Inode()
 {
-    this->buffers[0] = new BlockBuffer(0x1000);
-    this->buffers[1] = new BlockBuffer(0x1000);
+    this->init_buffers();
+}
+
+Inode::Inode(const char *name_)
+    : name(name_)
+{
+    this->init_buffers();
+}
+
+Inode::Inode(const char *name_, Inode *parent_)
+    : name(name_), parent(parent_)
+{
+    this->init_buffers();
 }
 
 Inode::~Inode()
 {
+}
+
+void Inode::init_buffers(void)
+{
+    this->buffers[0] = new BlockBuffer(0x1000);
+    this->buffers[1] = new BlockBuffer(0x1000);
 }
 
 size_t Inode::read(unsigned int buffer, uintptr_t offset, void *data, size_t length)
@@ -50,5 +70,41 @@ size_t Inode::write(unsigned int buffer, uintptr_t offset, const void *data, siz
         return b->write(offset, (const uint8_t*) data, length);
     }
     return 0;
+}
+
+char *Inode::generatePath(void)
+{
+    return this->generatePath(NULL);
+}
+
+char *Inode::generatePath(char *buffer)
+{
+    size_t length = 0;
+    Inode *ino = this;
+
+    while(ino != NULL)
+    {
+        length += strlen(ino->name) + 1;
+        ino = ino->parent;
+    }
+
+    if(buffer == NULL)
+    {
+        buffer = (char*) malloc(length);
+    }
+
+    ino = this;
+    buffer[length--] = '\0';
+    while(ino != NULL)
+    {
+        int pos = strlen(ino->name) - 1;
+        while(pos >= 0)
+            buffer[length--] = ino->name[pos--];
+
+        buffer[length--] = '/';
+        ino = ino->parent;
+    }
+
+    return buffer;
 }
 

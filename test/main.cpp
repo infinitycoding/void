@@ -72,7 +72,7 @@ int main(int argc, char **argv)
     }
     else
     {
-        sleep(1); // wait for init
+        sleep(2); // wait for init
 
         // create shm
         int shm_id = shmget(156883, 0x1000, IPC_CREAT | SHM_R | SHM_W);
