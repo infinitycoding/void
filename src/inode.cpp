@@ -20,40 +20,58 @@
  * @author Michael Sippel <micha@infinitycoding.de>
  */
 #include "inode.h"
+#include "dir.h"
 #include "blockbuffer.h"
 
 #include <stdlib.h>
 #include <string.h>
+#include <assert.h>
 
 Inode::Inode()
 {
-    this->init_buffers();
+    this->init_buffers(2, 0x1000);
 }
 
 Inode::Inode(const char *name_)
     : name(name_)
 {
-    this->init_buffers();
+    this->init_buffers(2, 0x1000);
 }
 
-Inode::Inode(const char *name_, Inode *parent_)
-    : name(name_), parent(parent_)
+Inode::Inode(const char *name_, DirectoryInode *parent_)
+    : name(name_)
 {
-    this->init_buffers();
+    this->setParent(parent_);
+    this->init_buffers(2, 0x1000);
 }
 
 Inode::~Inode()
 {
 }
 
-void Inode::init_buffers(void)
+void Inode::setParent(DirectoryInode *parent_)
 {
-    this->buffers[0] = new BlockBuffer(0x1000);
-    this->buffers[1] = new BlockBuffer(0x1000);
+    if(this->parent != NULL)
+        this->parent->removeEntry(this);
+
+    this->parent = parent_;
+
+    if(this->parent != NULL)
+        this->parent->addEntry(this);
+}
+
+void Inode::init_buffers(size_t num, size_t size)
+{
+    this->num_buffers = num;
+    this->buffers = (BlockBuffer**) malloc(num * sizeof(BlockBuffer*));
+    int i;
+    for(i = 0; i < num; i++)
+        this->buffers[i] = new BlockBuffer(size);
 }
 
 size_t Inode::read(unsigned int buffer, uintptr_t offset, void *data, size_t length)
 {
+    assert(buffer < num_buffers);
     BlockBuffer *b = this->buffers[buffer];
     if(b != NULL)
     {
@@ -64,12 +82,18 @@ size_t Inode::read(unsigned int buffer, uintptr_t offset, void *data, size_t len
 
 size_t Inode::write(unsigned int buffer, uintptr_t offset, const void *data, size_t length)
 {
+    assert(buffer < num_buffers);
     BlockBuffer *b = this->buffers[buffer];
     if(b != NULL)
     {
         return b->write(offset, (const uint8_t*) data, length);
     }
     return 0;
+}
+
+unsigned int Inode::getID(void)
+{
+    return this->id;
 }
 
 char *Inode::generatePath(void)

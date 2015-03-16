@@ -1,3 +1,5 @@
+#ifndef _dir_h_
+#define _dir_h_
 /*
      Copyright 2015 Infinitycoding all rights reserved
      This file is part of void.
@@ -19,39 +21,20 @@
 /**
  * @author Michael Sippel <micha@infinitycoding.de>
  */
-#include "void.h"
-#include "client.h"
 #include "inode.h"
-#include "dir.h"
 
-#include <stdio.h>
-#include <stdlib.h>
-
-Client *client;
-
-void sig_register(int id)
+class DirectoryInode : public Inode
 {
-    printf("[VOID] register client with id %d\n", id);
-    client = new Client(id);
-}
+    public:
+        DirectoryInode();
+        DirectoryInode(const char *name_);
+        DirectoryInode(const char *name_, DirectoryInode *parent_);
+        ~DirectoryInode();
 
-void sig_command(int id)
-{
-    client->command();
-}
+        void addEntry(Inode *inode);
+        void removeEntry(Inode *inode);
+        Inode *getEntry(const char *name);
+};
 
-int main(int argc, char **argv)
-{
-    DirectoryInode *usr = new DirectoryInode("usr");
-    DirectoryInode *bin = new DirectoryInode("bin", usr);
-    Inode *foo = new Inode("foo", bin);
-
-    printf("path: %s\n", foo->generatePath());
-
-#ifdef __linux__
-    init_linux();
 #endif
-
-    return 0;
-}
 

@@ -23,28 +23,37 @@
  */
 #include "blockbuffer.h"
 
+class DirectoryInode;
 class Inode
 {
     public:
         Inode();
         Inode(const char *name_);
-        Inode(const char *name_, Inode *parent_);
+        Inode(const char *name_, DirectoryInode *parent_);
         ~Inode();
 
         const char *name;
-        size_t length;
-        Inode *parent;
-
-        BlockBuffer *buffers[2];
 
         size_t read(unsigned int buffer, uintptr_t offset, void *data, size_t length);
         size_t write(unsigned int buffer, uintptr_t offset, const void *data, size_t length);
 
+        void setParent(DirectoryInode *parent_);
+
         char *generatePath(void);
         char *generatePath(char *buffer);
 
+        unsigned int getID(void);
+
+    protected:
+        DirectoryInode *parent;
+
+        size_t num_buffers;
+        BlockBuffer **buffers;
+
+        void init_buffers(size_t num, size_t size);
+
     private:
-        void init_buffers(void);
+        unsigned int id;
 };
 
 Inode *lookup_path(const char *path);

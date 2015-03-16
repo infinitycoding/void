@@ -19,39 +19,36 @@
 /**
  * @author Michael Sippel <micha@infinitycoding.de>
  */
-#include "void.h"
-#include "client.h"
-#include "inode.h"
 #include "dir.h"
+#include "blockbuffer.h"
+#include "inode.h"
 
-#include <stdio.h>
-#include <stdlib.h>
-
-Client *client;
-
-void sig_register(int id)
+DirectoryInode::DirectoryInode()
 {
-    printf("[VOID] register client with id %d\n", id);
-    client = new Client(id);
+    this->init_buffers(1, sizeof(Inode*));
 }
 
-void sig_command(int id)
+DirectoryInode::DirectoryInode(const char *name_)
 {
-    client->command();
+    this->name = name_;
+    this->init_buffers(1, sizeof(Inode*));
 }
 
-int main(int argc, char **argv)
+DirectoryInode::DirectoryInode(const char *name_, DirectoryInode *parent_)
 {
-    DirectoryInode *usr = new DirectoryInode("usr");
-    DirectoryInode *bin = new DirectoryInode("bin", usr);
-    Inode *foo = new Inode("foo", bin);
+    this->name = name_;
+    this->setParent(parent_);
+    this->init_buffers(1, sizeof(Inode*));
+}
 
-    printf("path: %s\n", foo->generatePath());
+void DirectoryInode::addEntry(Inode *inode)
+{
+    Inode **inp = (Inode**) this->buffers[0]->createBlock(inode->getID());
+    *inp = inode;
+}
 
-#ifdef __linux__
-    init_linux();
-#endif
-
-    return 0;
+void DirectoryInode::removeEntry(Inode *inode)
+{
+    this->buffers[0]->removeBlock(inode->getID());
 }
 
