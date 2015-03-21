@@ -30,13 +30,14 @@ class Inode
         Inode();
         Inode(const char *name_);
         Inode(const char *name_, DirectoryInode *parent_);
-        ~Inode();
+        virtual ~Inode();
 
         const char *name;
 
         size_t read(unsigned int buffer, uintptr_t offset, void *data, size_t length);
         size_t write(unsigned int buffer, uintptr_t offset, const void *data, size_t length);
 
+        const char *setName(const char *name_);
         void setParent(DirectoryInode *parent_);
 
         char *generatePath(void);
@@ -55,8 +56,6 @@ class Inode
     private:
         unsigned int id;
 };
-
-Inode *lookup_path(const char *path);
 
 #endif
 

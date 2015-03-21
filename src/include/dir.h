@@ -33,7 +33,7 @@ class DirectoryInode : public Inode
 
         void addEntry(Inode *inode);
         void removeEntry(Inode *inode);
-        Inode *getEntry(const char *name);
+        Inode *getEntry(const char *path);
 };
 
 #endif

@@ -27,26 +27,29 @@
 struct buffer_block
 {
     unsigned int id;
-    uint8_t *base;
+    void *base;
 };
 
-class BlockBuffer
-{
-    public:
+class BlockBuffer : public List<struct buffer_block*>
+    {
+public:
         BlockBuffer(size_t block_size_);
         ~BlockBuffer();
 
-        uint8_t *getBlock(unsigned int id);
-        uint8_t *createBlock(unsigned int id);
-        void removeBlock(unsigned int id);
+        struct buffer_block* getBlock(unsigned int id);
+        unsigned int getID(void);
+
+        struct buffer_block* createBlock(unsigned int id);
+        struct buffer_block* createBlock(unsigned int id, void *base);
+        struct buffer_block* removeBlock(unsigned int id);
+        struct buffer_block* removeBlock(void *base);
 
         size_t read(uintptr_t offset, uint8_t *data, size_t length);
         size_t write(uintptr_t offset, const uint8_t *data, size_t length);
 
-    private:
-        List<struct buffer_block> *blocks;
+private:
         size_t block_size;
-};
+    };
 
 #endif
 

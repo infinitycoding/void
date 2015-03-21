@@ -47,6 +47,9 @@ int main(int argc, char **argv)
     Inode *foo = new Inode("foo", bin);
 
     printf("path: %s\n", foo->generatePath());
+    printf("str: %s\n", usr->getEntry("bin/foo")->name);
+
+    return 0;
 
 #ifdef __linux__
     init_linux();

@@ -35,18 +35,35 @@ Inode::Inode()
 Inode::Inode(const char *name_)
     : name(name_)
 {
+    this->name = NULL;
+    this->setName(name_);
+
+    this->parent = NULL;
     this->init_buffers(2, 0x1000);
 }
 
 Inode::Inode(const char *name_, DirectoryInode *parent_)
     : name(name_)
 {
+    this->name = NULL;
+    this->setName(name_);
+
+    this->parent = NULL;
     this->setParent(parent_);
+
     this->init_buffers(2, 0x1000);
 }
 
 Inode::~Inode()
 {
+}
+
+const char *Inode::setName(const char *name_)
+{
+    this->name = (const char*) realloc((void*) this->name, strlen(name_)+1);
+    strcpy((char*) this->name, name_);
+
+    return this->name;
 }
 
 void Inode::setParent(DirectoryInode *parent_)

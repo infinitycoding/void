@@ -22,33 +22,90 @@
 #include "dir.h"
 #include "blockbuffer.h"
 #include "inode.h"
+#include <string.h>
+#include <stdlib.h>
 
 DirectoryInode::DirectoryInode()
 {
+    this->name = NULL;
+    this->parent = NULL;
     this->init_buffers(1, sizeof(Inode*));
 }
 
 DirectoryInode::DirectoryInode(const char *name_)
 {
-    this->name = name_;
+    this->name = NULL;
+    this->setName(name_);
+    this->parent = NULL;
     this->init_buffers(1, sizeof(Inode*));
 }
 
 DirectoryInode::DirectoryInode(const char *name_, DirectoryInode *parent_)
 {
-    this->name = name_;
+    this->name = NULL;
+    this->setName(name_);
+    this->parent = NULL;
     this->setParent(parent_);
     this->init_buffers(1, sizeof(Inode*));
 }
 
+DirectoryInode::~DirectoryInode()
+{
+}
+
 void DirectoryInode::addEntry(Inode *inode)
 {
-    Inode **inp = (Inode**) this->buffers[0]->createBlock(inode->getID());
-    *inp = inode;
+    this->buffers[0]->createBlock(this->buffers[0]->getID(), inode);
 }
 
 void DirectoryInode::removeEntry(Inode *inode)
 {
-    this->buffers[0]->removeBlock(inode->getID());
+    free(this->buffers[0]->removeBlock(inode));
+}
+
+Inode *DirectoryInode::getEntry(const char *path)
+{
+    static char delimiter[] = "/";
+    size_t n = 0;
+    while(path[n] != '/' && path[n] != '\0') n++;
+
+    Inode *inode = NULL;
+    if(n > 0)
+    {
+        ListIterator<struct buffer_block*> it = ListIterator<struct buffer_block*>(this->buffers[0]);
+
+        while(! it.isLast())
+        {
+            Inode *in = (Inode*) it.getCurrent()->base;
+            if(in != NULL && in->name != NULL && strncmp(in->name, path, n) == 0)
+            {
+                inode = in;
+                break;
+            }
+            else
+            {
+                printf("go\n");
+                it.next();
+            }
+        }
+    }
+    else
+        inode = (Inode*) this;
+
+    if(inode != NULL)
+    {
+        if(path[n] != '\0')
+        {
+            DirectoryInode *parent = dynamic_cast<DirectoryInode*>(inode);
+            if(parent != NULL)
+                return parent->getEntry(path + n + 1);
+            else
+                return NULL;
+        }
+        else
+            return inode;
+    }
+
+    return NULL;
 }
 

@@ -108,7 +108,6 @@ List<T>::~List<T>()
         T element = popFront();
         if(structCleaner)
             structCleaner(element);
-        delete element;
     }
 
     lock = false;
