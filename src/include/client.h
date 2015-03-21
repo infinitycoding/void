@@ -24,6 +24,7 @@
 #include "void.h"
 #include "list.h"
 #include "descriptor.h"
+#include "dir.h"
 
 class Client
 {
@@ -46,6 +47,7 @@ class Client
         int shm_id;
         struct command_data *data;
 
+        DirectoryInode *cwd;
         List<FileDescriptor*> *files;
 };
 

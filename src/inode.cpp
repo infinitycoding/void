@@ -29,7 +29,7 @@
 
 Inode::Inode()
 {
-    this->init_buffers(2, 0x1000);
+    this->init_buffers(1, 0x1000);
 }
 
 Inode::Inode(const char *name_)
@@ -39,7 +39,7 @@ Inode::Inode(const char *name_)
     this->setName(name_);
 
     this->parent = NULL;
-    this->init_buffers(2, 0x1000);
+    this->init_buffers(1, 0x1000);
 }
 
 Inode::Inode(const char *name_, DirectoryInode *parent_)
@@ -51,7 +51,7 @@ Inode::Inode(const char *name_, DirectoryInode *parent_)
     this->parent = NULL;
     this->setParent(parent_);
 
-    this->init_buffers(2, 0x1000);
+    this->init_buffers(1, 0x1000);
 }
 
 Inode::~Inode()

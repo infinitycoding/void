@@ -27,6 +27,7 @@
 struct buffer_block
 {
     unsigned int id;
+    size_t length;
     void *base;
 };
 

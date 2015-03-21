@@ -26,8 +26,10 @@
 
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 
 Client *client;
+DirectoryInode *root;
 
 void sig_register(int id)
 {
@@ -42,14 +44,16 @@ void sig_command(int id)
 
 int main(int argc, char **argv)
 {
-    DirectoryInode *usr = new DirectoryInode("usr");
+    root = new DirectoryInode();
+
+    DirectoryInode *usr = new DirectoryInode("usr", root);
     DirectoryInode *bin = new DirectoryInode("bin", usr);
     Inode *foo = new Inode("foo", bin);
+    Inode *hello = new Inode("hello", root);
 
-    printf("path: %s\n", foo->generatePath());
-    printf("str: %s\n", usr->getEntry("bin/foo")->name);
-
-    return 0;
+    char str[] = "Hallo. Das ist ein Text von VOID.";
+    size_t ret = hello->write(0, 0, str, strlen(str)+1);
+    printf("wrote %d bytes\n", ret);
 
 #ifdef __linux__
     init_linux();

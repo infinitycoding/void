@@ -25,10 +25,14 @@
 
 #include <stdio.h>
 
+extern DirectoryInode *root;
+
 Client::Client(int id_)
     : id(id_)
 {
     this->data = (struct command_data*) create_shm(&this->shm_id);
+
+    this->cwd = root;
     this->files = new List<FileDescriptor*>();
 }
 
@@ -85,13 +89,18 @@ FileDescriptor *Client::getDesc(int fd)
 int Client::open(const char *path)
 {
     printf("[VOID] open \"%s\"\n", path);
-    Inode *inode = new Inode();
+
+    Inode *inode = NULL;
+    if(path[0] == '/')
+        inode = root->getEntry(path+1);
+    else
+        inode = this->cwd->getEntry(path);
+
     InodeDescriptor *desc0 = new InodeDescriptor(inode);
     InodeDescriptor *desc1 = new InodeDescriptor(inode);
     FileDescriptor *desc = new FileDescriptor(desc0, desc1);
 
     desc->id = this->files->numOfElements();
-
     this->files->pushBack(desc);
 
     return desc->id;

@@ -84,7 +84,6 @@ Inode *DirectoryInode::getEntry(const char *path)
             }
             else
             {
-                printf("go\n");
                 it.next();
             }
         }

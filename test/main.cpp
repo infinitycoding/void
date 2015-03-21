@@ -87,21 +87,13 @@ int main(int argc, char **argv)
 
         // call something
         printf("[TEST] call some stuff..\n");
-        int fd1 = void_open("foo.txt", 0);
-        int fd2 = void_open("bar.bin", 0);
+        int fd = void_open("/hello", 0);
 
-        void_write(fd1, "Hallo Welt!\n", 13);
-        void_write(fd2, "Du auch.\n", 10);
+        char buf[64];
+        int ret = void_read(fd, &buf, 64);
+        printf("[TEST] got %d, buf: %s \n", ret, buf);
 
-        char buf[16];
-        void_read(fd1, &buf, 13);
-        printf("[TEST] read: %s", buf);
-
-        void_read(fd2, &buf, 10);
-        printf("[TEST] read: %s", buf);
-
-        void_close(fd1);
-        void_close(fd2);
+        void_close(fd);
 
         // kill
         printf("[TEST] kill void\n");

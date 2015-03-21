@@ -74,6 +74,7 @@ struct buffer_block *BlockBuffer::createBlock(unsigned int id, void *base)
 
     block->id = id;
     block->base = base;
+    block->length = 0;
 
     return block;
 }
@@ -112,7 +113,6 @@ struct buffer_block *BlockBuffer::removeBlock(void *base)
     }
 }
 
-
 size_t BlockBuffer::read(uintptr_t offset, uint8_t *data, size_t length)
 {
     // calculate block indices
@@ -120,24 +120,31 @@ size_t BlockBuffer::read(uintptr_t offset, uint8_t *data, size_t length)
     int block_off = offset % this->block_size;
 
     // search first block
-    uint8_t *block = (uint8_t*) this->getBlock(block_id)->base;
+    struct buffer_block *block = this->getBlock(block_id);
+    if(block == NULL) return 0;
+
+    uint8_t *base = (uint8_t*) block->base;
 
     // go through all bytes...
     int i;
     for(i = 0; i < length; i++)
     {
         // if the block ends, go to the next
-        if(block_off >= this->block_size)
+        if(block_off >= block->length)
         {
-            block = (uint8_t*) this->getBlock(++block_id)->base;
-            block_off = 0;
+            printf("over block\n");
+            block = this->getBlock(++block_id);
+            if(block != NULL)
+            {
+                base = (uint8_t*) block->base;
+                block_off = 0;
+            }
+            else
+                break;
         }
 
-        if(block == NULL)
-            break;
-
         // copy data
-        data[i] = block[block_off++];
+        data[i] = base[block_off++];
     }
 
     return i;
@@ -150,7 +157,8 @@ size_t BlockBuffer::write(uintptr_t offset, const uint8_t *data, size_t length)
     int block_off = offset % this->block_size;
 
     // search first block
-    uint8_t *block = (uint8_t*) this->createBlock(block_id)->base;
+    struct buffer_block *block = this->createBlock(block_id);
+    uint8_t *base = (uint8_t*) block->base;
 
     // go through all bytes...
     int i;
@@ -159,13 +167,18 @@ size_t BlockBuffer::write(uintptr_t offset, const uint8_t *data, size_t length)
         // if the block ends, go to the next
         if(block_off >= this->block_size)
         {
-            block = (uint8_t*) this->createBlock(++block_id)->base;
+            block->length = this->block_size;
+
+            block = this->createBlock(++block_id);
+            base = (uint8_t*) block->base;
+
             block_off = 0;
         }
 
         // copy data
-        block[block_off++] = data[i];
+        base[block_off++] = data[i];
     }
+    if(block_off > block->length) block->length = block_off;
 
     return i;
 }
